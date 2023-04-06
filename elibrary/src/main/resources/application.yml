@@ -1,0 +1,34 @@
+server:
+  port: 8090
+  error:
+    include-message: always
+    include-binding-errors: always
+
+spring:
+  application:
+    name: elibrary
+  config:
+    import: optional:consul:/
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        health-check-path: /health
+#  data:
+#    mongodb:
+#      uri: mongo://mongo:27017/mydatabase
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      base-path: /book
+      exposure:
+        include: "*"
+
+logging:
+  level:
+    root: INFO

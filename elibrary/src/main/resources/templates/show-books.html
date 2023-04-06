@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #0066CC;
+            font-size: 36px;
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            width: 80%;
+        }
+        th, td {
+            border: 1px solid #CCCCCC;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #F5F5F5;
+            font-weight: bold;
+        }
+        tbody tr:nth-child(even) {
+            background-color: #F5F5F5;
+        }
+        form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        select, button {
+            margin: 5px;
+            padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #0066CC;
+            color: #FFFFFF;
+            border: none;
+            cursor: pointer;
+        }
+        a {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px;
+            text-align: center;
+            background-color: #0066CC;
+            color: #FFFFFF;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        a:hover {
+            background-color: #003399;
+        }
+        .text-right {
+            text-align: right;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<h1>Books</h1>
+<div th:if="${#authentication.isAuthenticated()}" class="text-right">
+    <p>Welcome, <span th:text="${#authentication.name}"></span>!</p>
+</div>
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>User</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.title}"></td>
+        <td th:text="${book.author}"></td>
+        <td>
+            <form action="/add-book-to-user" method="post">
+                <select name="userId">
+                    <option value="">Select User</option>
+                    <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+                </select>
+                <input type="hidden" name="bookId" th:value="${book.id}"/>
+                <button type="submit">Add</button>
+            </form>
+        </td>
+        <td>
+            <a th:href="@{'/books/' + ${book.id}}">View</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/createBook}">Create Book</a>
+<a href="javascript:history.back()">back</a>
+</body>
+</html>

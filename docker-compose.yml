@@ -1,0 +1,30 @@
+version: "3"
+services:
+  mysql:
+    image:  mysql
+    container_name: mysql8
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: users
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+
+  mongo:
+    image: mongo
+    container_name: mongo
+    environment:
+      - MONGO_INITDB_DATABASE=mydatabase
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+
+  consul:
+    image: consul:latest
+    container_name: consul
+    ports:
+      - "8500:8500"
+    command: consul agent -server -bootstrap-expect=1 -ui -data-dir /consul/data -client=0.0.0.0
+    restart: on-failure
